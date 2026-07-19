@@ -83,6 +83,10 @@
     border:1px solid var(--border)}
   #bfill{height:100%;width:0;background:var(--primary);border-radius:99px;transition:width .15s}
   #ptext{font-size:12px;color:var(--muted-fg);margin-top:6px}
+  #exrow{display:flex;justify-content:center;margin-top:14px}
+  #out.example{max-height:860px;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent 98%);
+    mask-image:linear-gradient(to bottom,#000 60%,transparent 98%)}
   #err{display:none;background:color-mix(in srgb, var(--destructive) 10%, var(--card));
     border:1px solid var(--destructive);color:var(--destructive);
     border-radius:.75rem;padding:12px 16px;margin-top:16px;font-size:14px}
@@ -155,6 +159,7 @@
     <div class="small">or click to browse — parsed entirely in your browser</div>
     <input type="file" id="file" accept=".msi,.msp,.mst" hidden>
   </div>
+  <div id="exrow"><button class="btn" id="showEx">Show example</button></div>
   <div id="prog"><div class="bar"><div id="bfill"></div></div><div id="ptext"></div></div>
   <div id="err"></div>
 
@@ -558,6 +563,45 @@ function updProgress(f,src,stage,frac){
   $("ptext").textContent=`${stage} — ${fmtSize(src.bytesRead)} read of ${fmtSize(f.size)} (only required sectors are read)`;
 }
 
+/* --- example (Adobe Acrobat DC) --- */
+const EXAMPLE={
+  name:"AcroPro.msi", size:11964055, bytesRead:743424,
+  r:{codepage:0, summary:[], properties:[
+    ["Text","0"],["DiskPrompt","[1]"],["Registration","No"],
+    ["UpgradeCode","{AC76BA86-0000-0000-7760-7E8A45000000}"],
+    ["ProductCode","{AC76BA86-1033-FF00-7760-BC15014EA700}"],
+    ["bIsPro","1"],["AppDataFolder","DC"],["ALLUSERS","1"],
+    ["DirectoryTable100_x86.1DEE2A86_2F57_3629_8107_A71DBB4DBED2","DirectoryTable"],
+    ["DirectoryTable100_x86.8F364BD8_5C29_332B_9A0E_43DF52AD4A09","DirectoryTable"],
+    ["DirectoryTable100_x86.D371D00B_69EC_3F8E_A622_74710A89ADC1","DirectoryTable"],
+    ["DirectoryTable100_amd64.05F0B5F5_44A8_3793_976B_A4F17AECF92C","DirectoryTable"],
+    ["DirectoryTable100_x86.194841A2_D0F2_3B96_9F71_05BA91BEA0FA","DirectoryTable"],
+    ["DirectoryTable100_x86.CC943011_A332_3C6E_AE5A_D28E3EC152B8","DirectoryTable"],
+    ["DirectoryTable100_x86.E281B893_10D7_34CE_BB0E_B69D88E154A5","DirectoryTable"],
+    ["DirectoryTable100_x86.71E1EC1A_562B_3AD1_94CD_84420ED4073F","DirectoryTable"],
+    ["DirectoryTable100_x86.F1670FCA_6780_3657_9C04_AF8005AC8143","DirectoryTable"],
+    ["DirectoryTable100_amd64.DFEFC2FE_EEE6_424C_841B_D4E66F0C84A3","DirectoryTable"],
+    ["APP_LANG_FROM_REG","0"],["DELBASIDTCA","00000"],["ENABLE_READER_MODE","0"],
+    ["RESERVED_APPNAME_PDAPP","PDApp.exe"],["RESERVED_APPNAME_AAMSETUP","set-up.exe"],
+    ["ProductName","Adobe Acrobat DC (64-bit)"],["ProductVersion","21.001.20135"],
+    ["Manufacturer","Adobe"],["ProductLanguage","1033"]
+  ]}
+};
+const exBtn=$("showEx");
+let exampleOn=false;
+function setExample(on){
+  exampleOn=on;
+  exBtn.textContent=on?"Hide example":"Show example";
+  if(on){
+    render(EXAMPLE.name,EXAMPLE.size,EXAMPLE.r,EXAMPLE.bytesRead);
+    $("out").classList.add("example");
+  }else{
+    $("out").classList.remove("example");
+    $("out").style.display="none";
+  }
+}
+exBtn.addEventListener("click",()=>setExample(!exampleOn));
+
 let busy=false;
 async function handleFile(f){
   if(!f||busy)return;
@@ -568,6 +612,8 @@ async function handleFile(f){
   try{
     const r=await parseMsi(src,(stage,frac)=>updProgress(f,src,stage,frac));
     hideProgress();
+    exampleOn=false;exBtn.textContent="Show example";
+    $("out").classList.remove("example");
     render(f.name,f.size,r,src.bytesRead);
   }catch(ex){
     hideProgress();
