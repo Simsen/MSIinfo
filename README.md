@@ -1,4 +1,4 @@
-# MSIINFO.com — MSI Property Viewer
+# MSIinfo.com — MSI Property Viewer
 
 🌐 Webapp: <https://msiinfo.com>
 
