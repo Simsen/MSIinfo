@@ -64,6 +64,10 @@
     border-radius:99px;padding:2px 10px;background:var(--card)}
   html.dark .tag{color:var(--primary)}
   .grow{flex:1}
+  .gh{display:inline-flex;align-items:center;justify-content:center;padding:6px;border-radius:8px;
+    border:1px solid var(--border);background:var(--card-elevated);color:var(--muted-fg);line-height:0}
+  .gh svg{width:16px;height:16px;fill:currentColor}
+  .gh:hover{color:var(--fg);border-color:var(--primary)}
   .theme{display:inline-flex;align-items:center;gap:2px;padding:2px;border-radius:8px;
     border:1px solid var(--border);background:var(--card-elevated)}
   .theme button{border:0;background:none;color:var(--muted-fg);padding:5px 7px;border-radius:6px;
@@ -145,6 +149,7 @@
     <h1><span>MSI</span>info<span>.com</span></h1>
     <span class="tag">100% local — nothing leaves your browser</span>
     <span class="grow"></span>
+    <a class="gh" href="https://github.com/Simsen/MSIinfo" target="_blank" rel="noopener noreferrer" title="View on GitHub" aria-label="View on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></a>
     <div class="theme" role="radiogroup" aria-label="Theme">
       <button id="th-light" title="Light"><svg fill="none" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
       <button id="th-dark" title="Dark"><svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg></button>
@@ -195,7 +200,7 @@
   <footer>This tool processes all data locally in your browser. No information is sent to any server.</footer>
 </div>
 
-<div class="bottombar">MSIInfo is owned and maintained by <a href="https://www.linkedin.com/in/simoneriksendk/" target="_blank" rel="noopener noreferrer">Simon Hartmann Eriksen</a>.</div>
+<div class="bottombar">MSIInfo is owned and maintained by <a href="https://www.linkedin.com/in/simoneriksendk/" target="_blank" rel="noopener noreferrer">Simon Hartmann Eriksen</a> · <a href="https://www.simsenblog.dk" target="_blank" rel="noopener noreferrer">www.simsenblog.dk</a></div>
 
 <script>
 "use strict";
