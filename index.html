@@ -88,9 +88,9 @@
   #bfill{height:100%;width:0;background:var(--primary);border-radius:99px;transition:width .15s}
   #ptext{font-size:12px;color:var(--muted-fg);margin-top:6px}
   #exrow{display:flex;justify-content:center;margin-top:14px}
-  #out.example{max-height:860px;overflow:hidden;
-    -webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent 98%);
-    mask-image:linear-gradient(to bottom,#000 60%,transparent 98%)}
+  #out.example{max-height:1560px;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to bottom,#000 75%,transparent 98%);
+    mask-image:linear-gradient(to bottom,#000 75%,transparent 98%)}
   #err{display:none;background:color-mix(in srgb, var(--destructive) 10%, var(--card));
     border:1px solid var(--destructive);color:var(--destructive);
     border-radius:.75rem;padding:12px 16px;margin-top:16px;font-size:14px}
@@ -121,6 +121,12 @@
   .cmd code{font-family:var(--mono);font-size:13px;flex:1;word-break:break-all;color:var(--primary-strong)}
   html.dark .cmd code{color:var(--primary)}
   .cmd .lbl{flex:none;font-size:12px;color:var(--muted-fg);width:130px}
+  .cmd.block{flex-direction:column;align-items:stretch}
+  .cmd.block .toprow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .cmd.block .lbl{width:auto}
+  .cmd.block pre{margin:8px 0 2px;font-family:var(--mono);font-size:13px;line-height:1.55;
+    color:var(--primary-strong);white-space:pre-wrap;word-break:break-all;overflow-x:auto}
+  html.dark .cmd.block pre{color:var(--primary)}
   table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);
     border:1px solid var(--border);border-radius:.75rem;overflow:hidden;font-size:13px;
     box-shadow:var(--shadow-soft)}
@@ -428,8 +434,10 @@ async function parseMsi(src,progress){
   progress("Reading summary information",0.85);
   const sumE=cfb.entries.find(e=>e.type===2&&e.name==="\x05SummaryInformation");
   const summary=sumE?parseSummary(await cfb.readStream(sumE)):[];
+  const tpl=summary.find(x=>x[0].startsWith("Template"));
+  const platform=tpl?String(tpl[1]).split(";")[0].trim():"";
   progress("Done",1);
-  return {properties,summary,codepage:pool.codepage,
+  return {properties,summary,platform,codepage:pool.codepage,
     tables:Object.keys(streams).filter(n=>n.startsWith("!")&&!n.startsWith("!_")).map(n=>n.slice(1))};
 }
 
@@ -482,6 +490,11 @@ function cmdRow(label,text){
   return `<div class="cmd"><span class="lbl">${esc(label)}</span><code>${esc(text)}</code>
     <button class="copy" data-copy="${esc(text)}">Copy</button></div>`;
 }
+function cmdBlock(label,text){
+  return `<div class="cmd block"><div class="toprow"><span class="lbl">${esc(label)}</span>
+    <button class="copy" data-copy="${esc(text)}">Copy</button></div>
+    <pre>${esc(text)}</pre></div>`;
+}
 function fmtSize(b){
   if(b>=1073741824)return (b/1073741824).toFixed(2)+" GB";
   if(b>=1048576)return (b/1048576).toFixed(2)+" MB";
@@ -526,9 +539,23 @@ function render(fileName,fileSize,r,bytesRead){
   let cmds="";
   cmds+=cmdRow("Silent install",`msiexec /i "${fileName}" /qn /norestart`);
   if(p.ProductCode){
+    // 32-bit MSIs register under WOW6432Node on 64-bit Windows
+    const is32=/^(intel|x86)$/i.test(r.platform||"");
+    const regPath=`HKLM\\SOFTWARE\\${is32?"WOW6432Node\\":""}Microsoft\\Windows\\CurrentVersion\\Uninstall\\${p.ProductCode}`;
     cmds+=cmdRow("Silent uninstall",`msiexec /x "${p.ProductCode}" /qn /norestart`);
-    cmds+=cmdRow("Intune detection",`HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\${p.ProductCode}`);
-    cmds+=cmdRow("PowerShell check",`Get-CimInstance Win32_Product -Filter "IdentifyingNumber='${p.ProductCode}'"`);
+    cmds+=cmdRow("Intune detection",regPath);
+    // Registry-based check — never use Win32_Product (triggers MSI self-repair)
+    cmds+=cmdBlock("PowerShell check",
+`$ProductCode = "${p.ProductCode}"
+$Paths = @(
+    "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\$ProductCode",
+    "HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\$ProductCode"
+)
+if ($Paths | Where-Object { Test-Path $_ }) {
+    Write-Output "Installed"
+} else {
+    Write-Output "Not installed"
+}`);
   }
   $("cmds").innerHTML=cmds;
 
