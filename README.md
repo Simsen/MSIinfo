@@ -20,7 +20,7 @@ Getting a ProductCode out of an MSI normally requires PowerShell + COM interop, 
 - 📄 **Full Property table** — filterable, exportable as JSON or CSV
 - ℹ️ **Summary Information** — Package Code, minimum installer version, compressed-source flag, platform/languages, timestamps
 - ⚡ **Handles multi-GB files** — the file is read lazily via `File.slice()`; only the sectors needed (header, FAT, directory, Property table) are touched. A 2 GB installer typically costs under 10 MB of RAM and never loads the embedded cab
-- 🌗 **Light / auto / dark theme** — remembers your choice, follows the OS in auto
+- 🌗 **Light / dark theme** — remembers your choice, follows the OS in auto
 - 🔒 **100% local** — no data leaves the browser; works offline and from `file://`
 
 ## How it works
