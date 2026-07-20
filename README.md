@@ -2,7 +2,7 @@
 
 🌐 Webapp: <https://msiinfo.com>
 
-A single-file, browser-based tool that reads Windows Installer (`.msi`) packages and shows their **Property table** — ProductCode, UpgradeCode, ProductVersion, Manufacturer — plus Summary Information and ready-to-use deployment command lines.
+A browser-based tool that reads Windows Installer (`.msi`) packages and shows their **Property table** — ProductCode, UpgradeCode, ProductVersion, Manufacturer — plus Summary Information and ready-to-use deployment command lines.
 
 Drag & drop an MSI. No upload, no install, no dependencies.
 
@@ -37,7 +37,7 @@ All reads go through a lazy source backed by `File.slice()`, so only required by
 
 ## Usage
 
-Open `GetMSI.html` in any modern browser (Chrome, Edge, Firefox, Safari) and drop an `.msi` on it. That's it — no build step, no server.
+Open the site in any modern browser (Chrome, Edge, Firefox, Safari) and drop an `.msi` on it. That's it — no build step, no server.
 
 To self-host: serve the single HTML file from any static host.
 
