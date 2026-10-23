@@ -24,7 +24,6 @@
     --destructive: #b42318;
     --shadow-soft: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.06);
     --shadow-lift: 0 6px 24px rgba(0,0,0,.10);
-    --bg-glow: rgba(15,98,254,.08);
     --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   }
   @media (prefers-color-scheme: dark){
@@ -44,14 +43,13 @@
       --destructive: #f87171;
       --shadow-soft: 0 1px 2px rgba(0,0,0,.2), 0 4px 12px rgba(0,0,0,.18);
       --shadow-lift: 0 4px 20px rgba(0,0,0,.35);
-      --bg-glow: rgba(91,140,255,.10);
     }
   }
   *{box-sizing:border-box}
   html{color-scheme:light dark}
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;color:var(--fg);min-height:100vh;
-    background:radial-gradient(ellipse 80% 50% at 50% -10%, var(--bg-glow), transparent 60%),var(--bg)}
+    background:var(--bg)}
   .wrap{max-width:1000px;margin:0 auto;padding:0 20px 90px}
   .bottombar{position:fixed;left:0;right:0;bottom:0;z-index:10;
     border-top:1px solid var(--border);
