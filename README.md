@@ -49,7 +49,9 @@ To self-host: serve the single HTML file from any static host.
 
 ## Privacy
 
-All processing happens locally in your browser. No file contents, filenames, or telemetry are sent to any server.
+All processing happens locally in your browser. No file contents or file names are sent to any server.
+
+msiinfo.com counts page visits with [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/): no cookies, no IP addresses stored, and nothing about the files you open.
 
 ## License
 

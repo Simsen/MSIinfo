@@ -187,7 +187,7 @@
     </section>
   </div>
 
-  <footer>This tool processes all data locally in your browser. No information is sent to any server.</footer>
+  <footer>Your MSI is processed locally in your browser and never uploaded: no file contents or file names are sent to any server. Page visits are counted with Cloudflare Web Analytics, without cookies.</footer>
 </div>
 
 <div class="bottombar">MSIInfo is owned and maintained by <a href="https://www.linkedin.com/in/simoneriksendk/" target="_blank" rel="noopener noreferrer">Simon Hartmann Eriksen</a> · <a href="https://www.simsenblog.dk" target="_blank" rel="noopener noreferrer">www.simsenblog.dk</a></div>
@@ -636,5 +636,7 @@ $("filter").addEventListener("input",e=>renderProps(e.target.value));
 $("copyJson").addEventListener("click",e=>copyText(JSON.stringify(Object.fromEntries(lastProps),null,2),e.target));
 $("copyCsv").addEventListener("click",e=>copyText("Property;Value\n"+lastProps.map(([k,v])=>`${k};"${String(v).replace(/"/g,'""')}"`).join("\n"),e.target));
 </script>
+<!-- Cloudflare Web Analytics: counts page visits only, no cookies. MSI files never leave the browser. -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "32cc12f9e321484ba1eeaca228008e7f"}'></script>
 </body>
 </html>
